@@ -1,0 +1,26 @@
+### Make Application
+POST http://localhost:3000/applications
+Content-Type: application/json
+
+{
+    "company": "Astra Indonesia",
+    "position": "BackEnd Developer",
+    "status": "applied"
+}
+
+### Get All Application
+GET http://localhost:3000/applications
+
+### Get Application by ID
+GET http://localhost:3000/applications/id
+
+### Update Status of an Application
+PUT http://localhost:3000/applications/333
+Content-Type: application/json
+
+{
+    "status": "applied"
+}
+
+### Delete Application
+DELETE http://localhost:3000/applications/f2a33931-9a90-404b-b12a-05a5f104a608
