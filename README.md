@@ -2,6 +2,7 @@ Current features:
 - add application
 - see all applications
 - find application by ID
+- find application by position
 - update the status of an application
 - delete application
 
