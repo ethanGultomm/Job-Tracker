@@ -3,7 +3,7 @@ POST http://localhost:3000/applications
 Content-Type: application/json
 
 {
-    "company": "Astra Indonesia",
+    "company": "Facebook",
     "position": "Frontend Developer",
     "status": "applied"
 }
