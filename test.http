@@ -4,15 +4,18 @@ Content-Type: application/json
 
 {
     "company": "Astra Indonesia",
-    "position": "BackEnd Developer",
+    "position": "Frontend Developer",
     "status": "applied"
 }
 
 ### Get All Application
 GET http://localhost:3000/applications
 
+### Get Application by Position
+GET http://localhost:3000/applications?position=front
+
 ### Get Application by ID
-GET http://localhost:3000/applications/id
+GET http://localhost:3000/applications?id=df5c8b0e-9dc7-4852-afce-c12b14f3c8f0
 
 ### Update Status of an Application
 PUT http://localhost:3000/applications/333

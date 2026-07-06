@@ -15,6 +15,28 @@ app.get("/health", (req, res) => {
     });
 });
 
+// find applications
+app.get("/applications", async (req, res) =>{
+    console.log(req.query);
+    const where = {};
+
+    if(req.query.position){
+        where.position = {
+            contains: req.query.position,
+            mode: "insensitive"
+        };
+    }
+
+    if(req.query.id){
+        where.id = {
+            contains: req.query.id
+        };
+    }
+
+    const applications = await prisma.application.findMany({where});
+    res.json(applications);
+});
+
 app.post("/applications", async (req, res) => {
     const application = 
         await prisma.application.create({
@@ -25,12 +47,6 @@ app.post("/applications", async (req, res) => {
             }
         });
     res.status(201).json(application);
-});
-
-// List out all applications
-app.get("/applications", async (req, res) => {
-    const applications = await prisma.application.findMany();
-    res.json(applications);
 });
 
 // Get application by ID
@@ -80,12 +96,25 @@ app.put("/applications/:id", async (req, res) => {
 
 // Delete application
 app.delete("/applications/:id", async (req, res) =>{
-    const application =
+    try {
+        const application =
         await prisma.application.delete({
             where: {
                 id: req.params.id
             }
         });
-
     res.sendStatus(204);
+    }
+    catch (error){
+        if(error.code === "P2025"){
+            return res.status(404).json({
+                error: "Application doesn't exist twin"
+            });
+        }
+        console.error(error);
+
+        res.status(500).json({
+            error: "internal server error"
+        });
+    }
 });
