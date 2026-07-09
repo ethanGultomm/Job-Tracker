@@ -6,9 +6,17 @@ Current features:
 - update the status of an application
 - delete application
 
-Database records:
-- id (generated)
-- company name
-- position name
-- status
-- date added
+Database:
+  Application:
+  - id (generated)
+  - company name
+  - position name
+  - status
+  - date added
+  - userId
+
+  User:
+  - userId
+  - email
+  - password (hashed)
+  - date added
