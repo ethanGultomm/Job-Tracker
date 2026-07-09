@@ -1,29 +1,58 @@
-### Make Application
-POST http://localhost:3000/applications
+### Register
+POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "company": "Facebook",
-    "position": "Frontend Developer",
+    "email": "rio@example.com",
+    "password": "nothing"
+}
+
+### Login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "rio@example.com",
+    "password": "something"
+}
+
+### Make Application
+POST http://localhost:3000/applications
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "company": "Yorushika",
+    "position": "Bassist",
     "status": "applied"
 }
 
 ### Get All Application
 GET http://localhost:3000/applications
+Authorization: Bearer {{login.response.body.token}}
 
 ### Get Application by Position
 GET http://localhost:3000/applications?position=front
+Authorization: Bearer {{login.response.body.token}}
+
+### Get application by Company
+GET http://localhost:3000/applications?company=yorushika
+Authorization: Bearer {{login.response.body.token}}
 
 ### Get Application by ID
-GET http://localhost:3000/applications?id=df5c8b0e-9dc7-4852-afce-c12b14f3c8f0
+GET http://localhost:3000/applications?id=47a85a06-d5d3-48c9-bc07-19ca84d41210
+Authorization: Bearer {{login.response.body.token}}
 
 ### Update Status of an Application
-PUT http://localhost:3000/applications/333
+PUT http://localhost:3000/applications/ecf1437b-a431-4473-a38b-36094c686a33
+Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
-    "status": "applied"
+    "status": "rejected"
 }
 
 ### Delete Application
-DELETE http://localhost:3000/applications/f2a33931-9a90-404b-b12a-05a5f104a608
+DELETE http://localhost:3000/applications/47a85a06-d5d3-48c9-bc07-19ca84d41210
+Authorization: Bearer {{login.response.body.token}}

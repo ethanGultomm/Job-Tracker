@@ -1,7 +1,9 @@
 import { Router } from "express";
-import prisma from "../prisma.js";
+import prisma from "../db.js";
+import authenticate from "../middleware/auth.js";
 
 const router = Router();
+router.use(authenticate);
 
 /// ENDPOINTS
 // find applications
@@ -29,38 +31,24 @@ router.get("/", async (req, res) =>{
         };
     }
 
+    where.userId = { contains: req.user.userId };
+
     const applications = await prisma.application.findMany({where});
     res.json(applications);
 });
 
+// Make an application
 router.post("/", async (req, res) => {
     const application = 
         await prisma.application.create({
             data: {
                 company: req.body.company,
                 position: req.body.position,
-                status: req.body.status
+                status: req.body.status,
+                userId: req.user.userId
             }
         });
     res.status(201).json(application);
-});
-
-// Get application by ID
-router.get("/:id", async (req, res) => {
-    const application =
-        await prisma.application.findUnique({
-            where: {
-                id: req.params.id
-            }
-        });
-
-    if(!application) {
-        return res.status(404).json({
-            error: "job not found"
-        });
-    }
-
-    res.json(application);
 });
 
 // Update the status of an application
@@ -68,7 +56,8 @@ router.put("/:id", async (req, res) => {
     try{
         const application = await prisma.application.update({
             where: {
-                id: req.params.id
+                id: req.params.id,
+                userId: req.user.userId
             },
             data: {
                 status: req.body.status
@@ -96,7 +85,8 @@ router.delete("/:id", async (req, res) =>{
         const application =
         await prisma.application.delete({
             where: {
-                id: req.params.id
+                id: req.params.id,
+                userId: req.user.userId
             }
         });
     res.sendStatus(204);
