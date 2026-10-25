@@ -8,11 +8,12 @@ A REST API for keeping track of the jobs you've applied to. Users create an acco
 - **Framework:** Express
 - **Database:** PostgreSQL
 - **ORM:** Prisma
-- **Auth:** Email and password, with passwords hashed before storage
+- **Auth:** JSON Web Tokens (JWT), with passwords hashed before storage
 
 ## Features
 
 - User accounts with hashed passwords
+- Token-based authentication (JWT), so each user only accesses their own applications
 - Add a job application
 - List all of your applications
 - Find an application by ID
@@ -66,6 +67,7 @@ Create a `.env` file in the project root:
 ```env
 DATABASE_URL="postgresql://postgres:my_password@localhost:5432/jobtracker"
 JWT_SECRET="my-super-secret-development-key-12345"
+PORT=3000
 ```
 
 ### Set Up the Database
@@ -83,6 +85,31 @@ node server.js
 ```
 
 The API will be available at `http://localhost:3000`.
+
+## Authentication
+ 
+The API uses JWT bearer tokens. Log in with your email and password to receive a token (valid for 7 days), then send it in the `Authorization` header on every request to `/applications`.
+ 
+```http
+POST /auth/login
+Content-Type: application/json
+ 
+{
+  "email": "you@example.com",
+  "password": "your-password"
+}
+```
+ 
+```json
+{ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+```
+ 
+```http
+GET /applications
+Authorization: Bearer <token>
+```
+ 
+Requests without a valid token are rejected, and each user can only see and modify their own applications.
 
 ## API Endpoints
 
@@ -144,7 +171,7 @@ Sample requests are in `test.http`. If you use VS Code, install the REST Client 
 ├── routes/        # Route handlers
 ├── db.js          # Prisma client setup
 ├── server.js      # App entry point
-└── test.http      # Sample requests
+└── test.http      # Request examples
 ```
 
 ## Roadmap
